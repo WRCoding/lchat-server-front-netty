@@ -1,8 +1,8 @@
 <template>
   <a-col flex="65px" class="sideContainer">
     <a-avatar shape="square" size="large"
-              src="https://md-img-ink.oss-cn-shenzhen.aliyuncs.com/ink_41b984c89b0b11ec8ba4e674965fd9d8.png"
-              style="margin-top: 60px"/>
+              :src="user.avatar"
+              style="margin-top: 55px"/>
 
     <div style="width: 30px;height: 30px;background-color: hotpink; margin-top: 40px;">
 
@@ -22,7 +22,16 @@
 
 <script>
 export default {
-  name: "ChatLeft"
+  name: "ChatLeft",
+  data(){
+    return{
+      user: {}
+    }
+  },
+  created() {
+    this.user = this.$store.getters.getUser
+
+  }
 }
 </script>
 
