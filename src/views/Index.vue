@@ -15,6 +15,7 @@ import chatMain from "@/components/main_components/ChatMain";
 
 import SocketUtil from "@/js/SocketUtil"
 import MessageCodec from "@/js/MessageCodec"
+import ChatMessage from "@/js/message/ChatMessage";
 
 export default {
   name: "Index",
@@ -30,10 +31,12 @@ export default {
 
   },
   created() {
-    // let socket = new SocketUtil('127.0.0.1',8077)
-    // socket.send('委屈手动阀而且二委屈恶趣味个')
-    let codec = new MessageCodec()
-    codec.encode()
+    let socket = new SocketUtil('127.0.0.1',8077)
+    //content: msgType:contentType:xxxx
+    let content = '0:1:sdadasdasd'
+    let message = new ChatMessage(content,'xw','xl')
+    message.contentType
+    socket.send(MessageCodec.encode(message))
   }
 }
 </script>

@@ -23,8 +23,22 @@
 </template>
 
 <script>
+import {eventBus} from "@/main";
 export default {
-  name: "ListSession"
+  name: "ListSession",
+  data(){
+    return{
+
+    }
+  },
+  created() {
+      eventBus.$on('newFriend', data => {
+        console.log('newFriend: ',data)
+      })
+  },
+  methods:{
+
+  }
 }
 </script>
 

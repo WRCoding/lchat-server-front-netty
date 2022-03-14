@@ -7,7 +7,7 @@ import Antd from 'ant-design-vue';
 
 Vue.use(Antd);
 Vue.config.productionTip = false
-
+export const eventBus = new Vue()
 
 new Vue({
   router,
