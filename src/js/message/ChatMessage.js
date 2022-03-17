@@ -14,6 +14,10 @@ class ChatMessage extends Message {
         return JSON.stringify(chatMessage)
     }
 
+    static PARSE(message){
+        return new ChatMessage(message.content,message.sender,message.receiver)
+    }
+
 }
 
 module.exports = ChatMessage

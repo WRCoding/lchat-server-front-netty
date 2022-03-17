@@ -28,6 +28,21 @@ class MessageCodec {
         console.log('buffer: ',buffer)
         return buffer
     }
+
+    static decode(buffer){
+        let version = buffer.readInt8(3)
+        let padding = buffer.readInt32BE(4)
+        let serializer = buffer.readInt8(8)
+        let message = JSON.parse(buffer.toString('utf-8',16));
+        //content: msgType:contentType:xxxx
+        let msgType = message.msgType
+        let contentType = message.contentType
+        message.content = msgType+':'+contentType+':'+message.content
+        if (message.type === 0){
+            let chatMessage = ChatMessage.PARSE(message)
+            console.log('decode: ',chatMessage)
+        }
+    }
 }
 
 module.exports = MessageCodec

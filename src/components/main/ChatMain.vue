@@ -2,7 +2,7 @@
   <a-col flex="auto" class="mainContainer" style="">
     <div class="mainBox">
       <main-title/>
-      <main-chat/>
+      <main-single-chat/>
       <main-send/>
     </div>
 
@@ -10,14 +10,14 @@
 </template>
 
 <script>
-import mainTitle from "@/components/main_components/MainTitle";
-import mainChat from "@/components/main_components/MainChat";
-import mainSend from "@/components/main_components/MainSend";
+import mainTitle from "@/components/main/components/MainTitle";
+import mainSingleChat from "@/components/main/components/MainSingleChat";
+import mainSend from "@/components/main/components/MainSend";
 export default {
   name: "ChatMain",
   components: {
     mainTitle,
-    mainChat,
+    mainSingleChat,
     mainSend
   },
   data() {

@@ -10,8 +10,8 @@
 
 <script>
 import chatSide from "@/components/ChatSide";
-import chatList from "@/components/list_components/ChatList";
-import chatMain from "@/components/main_components/ChatMain";
+import chatList from "@/components/list/ChatList";
+import chatMain from "@/components/main/ChatMain";
 
 import SocketUtil from "@/js/SocketUtil"
 import MessageCodec from "@/js/MessageCodec"
@@ -35,8 +35,11 @@ export default {
     //content: msgType:contentType:xxxx
     let content = '0:1:sdadasdasd'
     let message = new ChatMessage(content,'xw','xl')
-    message.contentType
     socket.send(MessageCodec.encode(message))
+    socket.receive((data) => {
+      // console.log('index: ',MessageCodec.decode(data))
+      MessageCodec.decode(data)
+    })
   }
 }
 </script>

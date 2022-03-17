@@ -56,8 +56,14 @@ export default {
   background-color: rgb(247, 247, 247);
   display: flex;
   align-items: center;
-  justify-content: center
+  justify-content: center;
+  user-select: none;
 }
+
+.listSessionCard:hover {
+  cursor: pointer;
+}
+
 
 .listSessionAvatar {
   width: 20%;
