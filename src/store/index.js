@@ -5,11 +5,15 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    user: {}
+    user: {},
+    db: {}
   },
   getters: {
     getUser(state){
       return state.user
+    },
+    getDB(state){
+      return state.db
     }
   },
   mutations: {
@@ -18,6 +22,9 @@ export default new Vuex.Store({
     },
     deleteUser(state){
       state.user = {}
+    },
+    setDB(state,db){
+      state.db = db
     }
   },
   actions: {

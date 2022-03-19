@@ -1,21 +1,21 @@
 <template>
   <div class="listSessionBox">
     <!--会话列表-->
-    <div class="listSessionCard">
+    <div v-for="item in sessionList" class="listSessionCard" @click="toChat">
       <div class="listSessionAvatar">
         <a-avatar shape="square" :size="40"
-                  src="https://md-img-ink.oss-cn-shenzhen.aliyuncs.com/ink_41b984c89b0b11ec8ba4e674965fd9d8.png"/>
+                  :src="item.avatar"/>
       </div>
       <div class="listSessionInfo">
         <div style="width: 100%;height: 50%;display: flex;align-items: center;">
           <div class="listSessionInfo-name">
-            <div>win</div>
+            <div>{{ item.userName }}</div>
           </div>
           <div style="width:40%;"></div>
-          <div class="listSessionInfo-time">00:18</div>
+          <div class="listSessionInfo-time">{{ item.msgSeq }}</div>
         </div>
         <div class="listSessionInfo-text">
-          <div>Linux</div>
+          <div>{{ item.content }}</div>
         </div>
       </div>
     </div>
@@ -24,20 +24,43 @@
 
 <script>
 import {eventBus} from "@/main";
+import Session from "@/js/Session";
+
 export default {
   name: "ListSession",
-  data(){
-    return{
-
+  data() {
+    return {
+      sessionList: [],
+      sessionDB: new Session(this.$store.getters.getDB)
     }
   },
   created() {
-      eventBus.$on('newFriend', data => {
-        console.log('newFriend: ',data)
+    eventBus.$on('newFriend', data => {
+      console.log('newFriend: ', data)
+    })
+    eventBus.$on('toListSession', (value) => {
+      let exist = this.sessionList.some(session => {
+        if (session.lid === value.lid) {
+          return true
+        }
       })
+      if (!exist) {
+        this.sessionList.unshift(value)
+      }
+      eventBus.$emit('toSingleChatMain',value)
+    })
   },
-  methods:{
+  methods: {
+    toChat() {
+      // eventBus.$on('toChat', (value) => {
+      //   console.log('ListSession: ', value)
+      //   this.sessionList.unshift(value)
+      // })
 
+    }
+  },
+  beforeDestroy() {
+    eventBus.$off('toChat')
   }
 }
 </script>

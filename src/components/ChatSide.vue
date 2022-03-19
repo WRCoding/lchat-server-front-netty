@@ -1,5 +1,5 @@
 <template>
-  <a-col flex="65px" class="sideContainer">
+  <div class="sideContainer">
     <a-avatar shape="square" size="large"
               :src="user.avatar"
               style="margin-top: 55px"/>
@@ -16,11 +16,12 @@
       群聊
     </div>
 
-  </a-col>
+  </div>
 </template>
 
 <script>
 import {eventBus} from "@/main";
+
 
 export default {
   name: "ChatLeft",
@@ -32,6 +33,10 @@ export default {
   },
   created() {
     this.user = this.$store.getters.getUser
+    eventBus.$on('toChatSide',(value) =>{
+      this.currentOption = 'session'
+      eventBus.$emit('toChatList',value)
+    })
   },
   methods: {
     //触发选项
@@ -41,7 +46,9 @@ export default {
       eventBus.$emit('changeOption',value)
       console.log(value)
     }
-
+  },
+  beforeDestroy() {
+    eventBus.$off('toChat')
   }
 }
 </script>
@@ -49,6 +56,7 @@ export default {
 <style>
 
 .sideContainer {
+  width: 65px;
   height: 100%;
   display: flex;
   flex-direction: column;

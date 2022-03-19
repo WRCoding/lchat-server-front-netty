@@ -1,4 +1,4 @@
-const Message = require("@/js/message/Message");
+const Message = require("@/js/tcpMessage/Message");
 
 class ChatMessage extends Message {
 

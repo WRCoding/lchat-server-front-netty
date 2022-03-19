@@ -16,7 +16,7 @@
 
 <script>
 // import { ipcRenderer } from 'electron'
-import ChatMessage from "@/js/message/ChatMessage";
+import ChatMessage from "@/js/tcpMessage/ChatMessage";
 
 const {ipcRenderer} = window.require('electron')
 import user from '@/js/User'
@@ -39,7 +39,7 @@ export default {
         if (value.code === 200) {
           let content = '0:0:sdadasdasd'
           let message = new ChatMessage(content,'xw','xl')
-          console.log('message: ',MessageCodec.encode(ChatMessage.JSON(message)).toString())
+          console.log('tcpMessage: ',MessageCodec.encode(ChatMessage.JSON(message)).toString())
           let user = value.data
           this.$store.commit('setUser', user)
           ipcR.login('data')

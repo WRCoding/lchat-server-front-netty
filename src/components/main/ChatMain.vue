@@ -1,32 +1,52 @@
 <template>
-  <a-col flex="auto" class="mainContainer" style="">
+  <div class="mainContainer" >
     <div class="mainBox">
-      <main-title/>
-      <main-single-chat/>
-      <main-send/>
+      <main-title v-show="!isFriend" v-bind:name="name"/>
+      <main-single-chat v-show="!isFriend && single" v-bind:friend="friend"/>
+      <main-send v-show="!isFriend"/>
+      <main-friend v-show="isFriend"/>
     </div>
-
-  </a-col>
+  </div>
 </template>
 
 <script>
 import mainTitle from "@/components/main/components/MainTitle";
 import mainSingleChat from "@/components/main/components/MainSingleChat";
 import mainSend from "@/components/main/components/MainSend";
+import mainFriend from "@/components/main/components/MainFriend";
+import {eventBus} from "@/main";
+
 export default {
   name: "ChatMain",
   components: {
     mainTitle,
     mainSingleChat,
-    mainSend
+    mainSend,
+    mainFriend
   },
   data() {
     return {
-
+      isFriend: false,
+      single: true,
+      name: 'Hadoop',
+      friend: {}
     }
   },
-  methods: {
-
+  created() {
+    //切换到查看好友信息
+    eventBus.$on('watchFriend', (value) => {
+      this.isFriend = true;
+      eventBus.$emit('friendInfo', value)
+    })
+    eventBus.$on('toSingleChatMain', (value) => {
+      this.isFriend = false
+      this.name = value.userName
+      this.friend = value
+    })
+  },
+  methods: {},
+  beforeDestroy() {
+    eventBus.$off('toChat')
   }
 }
 </script>
@@ -35,7 +55,8 @@ export default {
 
 .mainContainer {
   background-color: rgb(243, 243, 243);
-  height: 100%
+  width: calc(100% - 325px);
+  height: 100%;
 }
 
 .mainBox {
@@ -43,10 +64,6 @@ export default {
   flex-direction: column;
   height: 100%
 }
-
-
-
-
 
 
 .text-left {

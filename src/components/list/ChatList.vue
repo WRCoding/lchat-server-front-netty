@@ -1,9 +1,9 @@
 <template>
-  <a-col flex="260px" class="listContainer">
+  <div class="listContainer">
     <list-search/>
-    <list-session v-if="currentOption === 'session' "/>
-    <list-friends v-if="currentOption === 'friends' "/>
-  </a-col>
+    <list-session v-show="currentOption === 'session' "/>
+    <list-friends v-show="currentOption === 'friends' "/>
+  </div>
 </template>
 
 <script>
@@ -27,12 +27,17 @@ export default {
     eventBus.$on('changeOption',(value) => {
       this.currentOption = value
     })
+    eventBus.$on('toChatList', (value) => {
+      this.currentOption = 'session'
+      eventBus.$emit('toListSession',value)
+    })
   }
 }
 </script>
 
 <style>
 .listContainer {
+  width: 265px;
   height: 100%;
   border-right: 1px solid rgb(224, 224, 224)
 }

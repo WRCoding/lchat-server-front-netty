@@ -1,10 +1,8 @@
 <template>
-  <div style="height: 100%;width: 100%">
-    <a-row type="flex" style="height: 100%;width: 100%;">
-      <chat-side/>
-      <chat-list/>
-      <chat-main/>
-    </a-row>
+  <div style="height: 100%;width: 100%;display: flex;flex-direction: column">
+    <chat-side/>
+    <chat-list/>
+    <chat-main/>
   </div>
 </template>
 
@@ -15,7 +13,8 @@ import chatMain from "@/components/main/ChatMain";
 
 import SocketUtil from "@/js/SocketUtil"
 import MessageCodec from "@/js/MessageCodec"
-import ChatMessage from "@/js/message/ChatMessage";
+import ChatMessage from "@/js/tcpMessage/ChatMessage";
+import ChatDB from "@/js/ChatDB";
 
 export default {
   name: "Index",
@@ -26,11 +25,14 @@ export default {
   },
   data(){
     return{
+      user: this.$store.getters.getUser,
       socketUtil: null
     }
 
   },
   created() {
+    let chatDB = new ChatDB(this.user.userName+'.db')
+    this.$store.commit('setDB',chatDB)
     let socket = new SocketUtil('127.0.0.1',8077)
     //content: msgType:contentType:xxxx
     let content = '0:1:sdadasdasd'

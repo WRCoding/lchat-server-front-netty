@@ -1,6 +1,6 @@
 // const buffer = window.require('Buffer')
 
-const ChatMessage = require("@/js/message/ChatMessage");
+const ChatMessage = require("@/js/tcpMessage/ChatMessage");
 
 /**
  * 消息编解码
@@ -12,7 +12,7 @@ class MessageCodec {
 
     static encode(message) {
         console.log('contentType: ',message.contentType)
-        console.log('message: ',message)
+        console.log('tcpMessage: ',message)
         let messageJson = ChatMessage.JSON(message);
         let byteLength = Buffer.byteLength(messageJson,'utf-8');
         let buffer = Buffer.alloc(16 + byteLength)

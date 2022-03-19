@@ -23,4 +23,11 @@ export default {
             data: data
         })
     },
+    //获取好友信息
+    friends(data){
+        return request({
+            url: '/user/friends?lid='+data,
+            method: 'get'
+        })
+    },
 }

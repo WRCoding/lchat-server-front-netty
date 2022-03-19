@@ -2,7 +2,7 @@
   <!--标题区-->
   <div class="mainTitleBox">
     <div class="mainTitleName">
-      <div style="font-size: 18px">ink</div>
+      <div style="font-size: 18px">{{name}}</div>
     </div>
     <div style="width:65%;"></div>
     <div class="mainTitleOperation">
@@ -25,6 +25,12 @@
 <script>
 export default {
   name: "MainTitle",
+  props:{
+    name:{
+      type: String,
+      required: true
+    }
+  },
   data() {
     return {
       visible: false,

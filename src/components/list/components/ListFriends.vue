@@ -1,15 +1,15 @@
 <template>
   <div class="listFriendsBox">
-    <!--会话列表-->
-    <div class="listFriendsCard">
+    <!--好友列表-->
+    <div v-for="friend in friends" class="listFriendsCard" @click="watchFriend(friend)">
       <div class="listFriendsAvatar">
         <a-avatar shape="square" :size="40"
-                  src="https://md-img-ink.oss-cn-shenzhen.aliyuncs.com/ink_41b984c89b0b11ec8ba4e674965fd9d8.png"/>
+                  :src="friend.avatar"/>
       </div>
       <div class="listFriendsInfo">
         <div style="width: 100%;height: 100%;display: flex;align-items: center;">
           <div class="listFriendsInfo-name">
-            <div>🍪</div>
+            <div>{{friend.userName}}</div>
           </div>
         </div>
       </div>
@@ -18,8 +18,32 @@
 </template>
 
 <script>
+import user from "@/js/User";
+import {eventBus} from "@/main";
 export default {
-  name: "ListFriends"
+  name: "ListFriends",
+  data() {
+    return {
+      user: this.$store.getters.getUser,
+      chatDB: this.$store.getters.getDB,
+      friends: []
+    }
+  },
+  created() {
+    this.getFriends()
+  },
+  methods: {
+    getFriends(){
+      user.friends(this.user.lid).then(response => {
+        let result = response.data.data
+        console.log(result)
+        this.friends = result
+      })
+    },
+    watchFriend(value){
+      eventBus.$emit('watchFriend',value)
+    }
+  }
 }
 </script>
 
