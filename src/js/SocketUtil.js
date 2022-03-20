@@ -8,27 +8,29 @@ const net = window.require('net')
  */
 class SocketUtil {
 
-    //等待队列
-    unAckMap = new Map()
-    date = new Date()
-    event = false
+    static socket;
 
-    constructor(ip, port) {
-        this.ip = ip
-        this.port = port
+    static {
         this.socket = this.init()
-        this.chatEvent = new ChatEvent()
         this.monitor()
     }
+
+
+    //等待队列
+    static unAckMap = new Map()
+    static event = false
+
+
+    constructor() {}
 
     /**
      * 初始化socket
      * @returns {Socket}
      */
-    init() {
+    static init() {
         return net.createConnection({
-            host: this.ip,
-            port: this.port
+            host: '127.0.0.1',
+            port: 8077
         });
     }
 
@@ -36,29 +38,26 @@ class SocketUtil {
      * 发送消息
      * @param message
      */
-    send(message) {
+    static send(message) {
         this.socket.write(message)
-        let mSecond = this.date.getMilliseconds()
+        let mSecond = new Date().getTime()
+        console.log(mSecond)
         let key = mSecond + ':' + 3
         this.unAckMap.set(key, message)
         console.log('map: ',this.unAckMap)
-        if (!this.event){
-            this.chatEvent.emit('data',1234)
-            this.event = true
-        }
         //todo 发送消息，同时加入map,
     }
 
     /**
      * 接收消息
      */
-    receive(callback){
+    static receive(callback){
         this.socket.on('data', (message) => {
             return callback(message)
         })
     }
 
-    monitor(){
+    static monitor(){
 
     }
 }

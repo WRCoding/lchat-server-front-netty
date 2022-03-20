@@ -15,13 +15,13 @@
 </template>
 
 <script>
-// import { ipcRenderer } from 'electron'
-import ChatMessage from "@/js/tcpMessage/ChatMessage";
+import { ipcRenderer } from 'electron'
 
-const {ipcRenderer} = window.require('electron')
 import user from '@/js/User'
-import ipcR from "@/js/IpcR";
 import MessageCodec from "@/js/MessageCodec";
+import SystemMessage from "@/js/tcpMessage/SystemMessage";
+import Message from "@/js/tcpMessage/Message";
+import SocketUtil from "@/js/SocketUtil";
 export default {
   name: "Login",
   data() {
@@ -37,12 +37,11 @@ export default {
         console.log('login response: ', response.data)
         let value = response.data
         if (value.code === 200) {
-          let content = '0:0:sdadasdasd'
-          let message = new ChatMessage(content,'xw','xl')
-          console.log('tcpMessage: ',MessageCodec.encode(ChatMessage.JSON(message)).toString())
           let user = value.data
           this.$store.commit('setUser', user)
-          ipcR.login('data')
+          let message = new SystemMessage(6,user.lid,'server')
+          SocketUtil.send(MessageCodec.encode(message))
+          ipcRenderer.send('login','data')
           ipcRenderer.on('success', ((event, arg) => {
             this.$router.push('/index')
           }))

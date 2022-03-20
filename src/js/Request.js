@@ -1,4 +1,4 @@
-const  axios = window.require('axios')
+import axios from 'axios'
 const BASE_URL = '/chat'
 
 const request = axios.create({

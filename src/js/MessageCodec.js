@@ -1,5 +1,6 @@
 // const buffer = window.require('Buffer')
 
+const Message = require("@/js/tcpMessage/Message");
 const ChatMessage = require("@/js/tcpMessage/ChatMessage");
 
 /**
@@ -13,7 +14,7 @@ class MessageCodec {
     static encode(message) {
         console.log('contentType: ',message.contentType)
         console.log('tcpMessage: ',message)
-        let messageJson = ChatMessage.JSON(message);
+        let messageJson = Message.JSON(message);
         let byteLength = Buffer.byteLength(messageJson,'utf-8');
         let buffer = Buffer.alloc(16 + byteLength)
         buffer.write('ink')

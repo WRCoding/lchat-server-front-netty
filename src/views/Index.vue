@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 100%;width: 100%;display: flex;flex-direction: column">
+  <div style="height: 100%;width: 100%;display: flex;flex-direction: row">
     <chat-side/>
     <chat-list/>
     <chat-main/>
@@ -33,12 +33,8 @@ export default {
   created() {
     let chatDB = new ChatDB(this.user.userName+'.db')
     this.$store.commit('setDB',chatDB)
-    let socket = new SocketUtil('127.0.0.1',8077)
-    //content: msgType:contentType:xxxx
-    let content = '0:1:sdadasdasd'
-    let message = new ChatMessage(content,'xw','xl')
-    socket.send(MessageCodec.encode(message))
-    socket.receive((data) => {
+
+    SocketUtil.receive((data) => {
       // console.log('index: ',MessageCodec.decode(data))
       MessageCodec.decode(data)
     })

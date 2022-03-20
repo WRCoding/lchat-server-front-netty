@@ -1,4 +1,4 @@
-const SQL = require('../js/SQL')
+const SQL = require('../SQL')
 module.exports = class Session{
     constructor(db) {
         this.chatDB = db

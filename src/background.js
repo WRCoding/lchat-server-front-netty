@@ -1,6 +1,6 @@
 
 
-import { app, protocol, BrowserWindow, ipcMain } from 'electron'
+const { app, protocol, BrowserWindow, ipcMain } = require('electron')
 import path from 'path'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
@@ -22,11 +22,9 @@ function createWindow() {
     titleBarStyle: "hidden",
     title: "",
     webPreferences: {
-      
-      // Use pluginOptions.nodeIntegration, leave this alone
-      // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: true,
       contextIsolation: false
+      // preload:  'preload.js'
     }
   })
 
@@ -36,7 +34,7 @@ function createWindow() {
     if (!process.env.IS_TEST) win.webContents.openDevTools()
   } else {
     // createProtocol('app')
-    // // Load the index.html when not in development
+    // // Load the index.html when not in developmentz
     // win.loadURL('app://./index.html')
   }
 }

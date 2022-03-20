@@ -24,7 +24,7 @@
 
 <script>
 import {eventBus} from "@/main";
-import Session from "@/js/Session";
+import Session from "@/js/list_session/Session";
 
 export default {
   name: "ListSession",

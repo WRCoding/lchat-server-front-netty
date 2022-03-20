@@ -30,7 +30,7 @@
         <span style="display: flex;flex-direction: column;align-items: flex-start">
                   <p style="margin: 0 0 0 14px;color: rgb(170, 170, 170)">ink</p>
                   <img src="https://md-img-ink.oss-cn-shenzhen.aliyuncs.com/ink_41b984c89b0b11ec8ba4e674965fd9d8.png"
-                       class="chat-img">
+                       class="chatRecord-left-img">
                 </span>
       </div>
     </div>

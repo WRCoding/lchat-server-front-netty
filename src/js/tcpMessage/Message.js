@@ -3,13 +3,16 @@
  */
 module.exports = class Message {
 
-    constructor(seqId,type,msgType,contentType) {
-        this.seqId = seqId;
+    constructor(msgSeq,type,msgType,contentType) {
+        this.msgSeq = msgSeq;
         this.msgType = msgType;
         this.contentType = contentType;
         this.type = type;
     }
 
+    static JSON(message){
+        return JSON.stringify(message)
+    }
 
     get getType() {
         return this.type;

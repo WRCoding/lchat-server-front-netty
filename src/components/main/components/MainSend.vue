@@ -8,8 +8,14 @@
     </div>
     <!--发送区 -->
     <div class="sendBox">
-      <div ref="areatext" contenteditable="true" class="area-text">
-        sadasdasd
+      <div v-viewer="options" ref="areatext" contenteditable="true" class="area-text"
+           v-on:keydown.meta.86="paste()" @keydown.enter="sendContent($event)">
+        <template v-for="(image,index) in pasteImages">
+          <img
+              :src="image.source" class="image" :key="index"
+              :data-src="image.thumbnail"
+          >
+        </template>
       </div>
 
     </div>
@@ -17,8 +23,49 @@
 </template>
 
 <script>
+import {clipboard} from "electron";
+import MainSend from "@/js/main_send/MainSend";
+import ChatMessage from "@/js/tcpMessage/ChatMessage";
+import SocketUtil from "@/js/SocketUtil";
+import MessageCodec from "@/js/MessageCodec";
+import {eventBus} from "@/main";
+
 export default {
-  name: "MainSend"
+  name: "MainSend",
+  props: {
+    receiver: {
+      type: String,
+      required: true
+    }
+  },
+  data() {
+    return {
+      user: this.$store.getters.getUser,
+      options: {
+        url: 'data-src',
+      },
+      pasteImages: []
+    }
+  },
+  methods: {
+    paste() {
+      let pasteImage = MainSend.paste(clipboard);
+      pasteImage !== undefined ? this.pasteImages.push(pasteImage) : ''
+    },
+    sendContent(event) {
+      event.preventDefault()
+      if (event.target.innerText.length > 0) {
+        let content = MainSend.content(event);
+        //content: msgType:contentType:xxxx
+        content = '0:' + '1:' + content
+        let message = new ChatMessage(content, this.user.lid, this.receiver)
+        SocketUtil.send(MessageCodec.encode(message))
+        eventBus.$emit('addSingleRecord', message)
+        event.target.innerText = ''
+        this.pasteImages = []
+      }
+    }
+  }
 }
 </script>
 
@@ -29,7 +76,7 @@ export default {
   width: 100%;
   height: 100%;
   text-align: left;
-  background-color: rgb(245, 245, 245);
+  background-color: rgb(242, 241, 241);
   resize: none;
   outline: none;
   word-wrap: break-word;
@@ -37,7 +84,8 @@ export default {
   overflow-y: auto;
   -webkit-user-modify: read-write-plaintext-only;
 }
-.sendBox{
+
+.sendBox {
   width: 100%;
   height: 150px
 }

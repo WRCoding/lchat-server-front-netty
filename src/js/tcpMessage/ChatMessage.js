@@ -10,10 +10,6 @@ class ChatMessage extends Message {
         this.receiver = receiver;
     }
 
-    static JSON(chatMessage){
-        return JSON.stringify(chatMessage)
-    }
-
     static PARSE(message){
         return new ChatMessage(message.content,message.sender,message.receiver)
     }

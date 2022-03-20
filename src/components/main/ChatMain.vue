@@ -3,7 +3,7 @@
     <div class="mainBox">
       <main-title v-show="!isFriend" v-bind:name="name"/>
       <main-single-chat v-show="!isFriend && single" v-bind:friend="friend"/>
-      <main-send v-show="!isFriend"/>
+      <main-send v-show="!isFriend" v-bind:receiver="receiver"/>
       <main-friend v-show="isFriend"/>
     </div>
   </div>
@@ -29,19 +29,21 @@ export default {
       isFriend: false,
       single: true,
       name: 'Hadoop',
-      friend: {}
+      friend: {},
+      receiver: ''
     }
   },
   created() {
     //切换到查看好友信息
-    eventBus.$on('watchFriend', (value) => {
+    eventBus.$on('watchFriend', (friend) => {
       this.isFriend = true;
-      eventBus.$emit('friendInfo', value)
+      eventBus.$emit('friendInfo', friend)
     })
-    eventBus.$on('toSingleChatMain', (value) => {
+    eventBus.$on('toSingleChatMain', (friend) => {
       this.isFriend = false
-      this.name = value.userName
-      this.friend = value
+      this.name = friend.userName
+      this.friend = friend
+      this.receiver = friend.lid
     })
   },
   methods: {},
@@ -66,63 +68,5 @@ export default {
 }
 
 
-.text-left {
-  font-weight: bold;
-  border: 1px solid rgb(240, 240, 240);
-  background-color: rgb(255, 255, 255);
-  border-radius: 5px;
-  padding: 10px 10px;
-  margin-left: 10px;
-  display: inline-block;
-  word-wrap: break-word;
-  max-width: 230px;
-  position: relative;
-}
-
-.text-left::after {
-  content: ' ';
-  display: inline-block;
-  border: 6px solid transparent;
-  border-right-color: rgb(255, 255, 255);
-  position: absolute;
-  top: 6px;
-  left: -12px;
-}
-
-.text-right {
-  font-weight: bold;
-  border: 1px solid rgb(214, 214, 214);
-  border-radius: 5px;
-  padding: 10px 10px;
-  background-color: rgb(152, 225, 101);
-  margin-right: 10px;
-  display: inline-block;
-  word-wrap: break-word;
-  max-width: 230px;
-  position: relative;
-
-}
-
-.chat-img {
-  border-radius: 5px;
-  display: inline-block;
-  margin-left: 10px;
-  width: 100px;
-  height: 200px;
-}
-
-.text-right::after {
-  white-space: pre-line;
-  content: ' ';
-  display: inline-block;
-  border: solid 6px red;
-  border-top-color: transparent;
-  border-bottom-color: transparent;
-  border-right-color: transparent;
-  border-left-color: rgb(152, 225, 101);
-  position: absolute;
-  top: 6px;
-  right: -12px;
-}
 
 </style>
