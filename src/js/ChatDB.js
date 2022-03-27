@@ -86,9 +86,10 @@ module.exports = class ChatDB {
               "msgSeq" INTEGER NOT NULL,
               "sender" text,
               "receiver" text,
-              "message" text,
-              "msgType" text,
-              "type" text
+              "content" text,
+              "msgType" INTEGER,
+              "contentType" INTEGER,
+              "ack" INTEGER DEFAULT 1
             );
         `
             this.db.run(sql,() => {

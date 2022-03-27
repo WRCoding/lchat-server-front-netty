@@ -31,13 +31,7 @@ export default {
 
   },
   created() {
-    let chatDB = new ChatDB(this.user.userName+'.db')
-    this.$store.commit('setDB',chatDB)
 
-    SocketUtil.receive((data) => {
-      // console.log('index: ',MessageCodec.decode(data))
-      MessageCodec.decode(data)
-    })
   }
 }
 </script>

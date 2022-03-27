@@ -41,10 +41,12 @@ export default {
   data() {
     return {
       user: this.$store.getters.getUser,
+      db: this.$store.getters.getDB,
       options: {
         url: 'data-src',
       },
-      pasteImages: []
+      pasteImages: [],
+      emitter: SocketUtil.getEmitter()
     }
   },
   methods: {
@@ -58,9 +60,10 @@ export default {
         let content = MainSend.content(event);
         //content: msgType:contentType:xxxx
         content = '0:' + '1:' + content
-        let message = new ChatMessage(content, this.user.lid, this.receiver)
-        SocketUtil.send(MessageCodec.encode(message))
-        eventBus.$emit('addSingleRecord', message)
+        let message = new ChatMessage(new Date().getTime(),content, this.user.lid, this.receiver)
+        SocketUtil.send(message)
+        this.emitter.emit('addSingleRecord', message)
+        MainSend.saveMsg(message)
         event.target.innerText = ''
         this.pasteImages = []
       }

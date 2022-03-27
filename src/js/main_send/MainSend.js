@@ -1,11 +1,17 @@
-const {clipboard} = require("electron");
+const SQL = require("@/js/SQL");
+import store from "../../store/index";
 
+export default class MainSend {
 
-module.exports = class MainSend{
-    constructor() {
+    static {
+        this.db = store.state.db
     }
 
-    static paste(clipboard){
+    constructor() {
+
+    }
+
+    static paste(clipboard) {
         if (!clipboard.readImage().isEmpty()) {
             let image = clipboard.readImage()
             console.log(image.getSize())
@@ -25,14 +31,23 @@ module.exports = class MainSend{
             }
             let resizeImage = image.resize({width: width, height: height, quality: 'good'})
             console.log(resizeImage.getSize())
-            return  {thumbnail: image.toDataURL(), source: resizeImage.toDataURL(), size: {width, height}}
-        }else{
+            return {thumbnail: image.toDataURL(), source: resizeImage.toDataURL(), size: {width, height}}
+        } else {
             return undefined
         }
     }
 
-    static content(event){
+    static content(event) {
         event.preventDefault()
         return event.target.innerText
     }
+
+    static saveMsg(message) {
+        let data = [message.msgSeq, message.sender, message.receiver, message.content, message.msgType, message.contentType]
+        let insertMsgSql = SQL.getInsertMsgSql();
+        let db = store.getters.getDB
+        db.insertData(insertMsgSql, data)
+    }
+
+
 }

@@ -1,9 +1,9 @@
 <template>
   <div class="mainContainer" >
     <div class="mainBox">
-      <main-title v-show="!isFriend" v-bind:name="name"/>
-      <main-single-chat v-show="!isFriend && single" v-bind:friend="friend"/>
-      <main-send v-show="!isFriend" v-bind:receiver="receiver"/>
+      <main-title v-if="!isFriend" v-bind:name="name"/>
+      <main-single-chat v-if="!isFriend && single" v-bind:friend="friend"/>
+      <main-send v-if="!isFriend" v-bind:receiver="receiver"/>
       <main-friend v-show="isFriend"/>
     </div>
   </div>
@@ -27,7 +27,7 @@ export default {
   data() {
     return {
       isFriend: false,
-      single: true,
+      single: false,
       name: 'Hadoop',
       friend: {},
       receiver: ''
@@ -41,6 +41,7 @@ export default {
     })
     eventBus.$on('toSingleChatMain', (friend) => {
       this.isFriend = false
+      this.single = true
       this.name = friend.userName
       this.friend = friend
       this.receiver = friend.lid

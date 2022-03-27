@@ -1,7 +1,7 @@
 <template>
   <div class="listSessionBox">
     <!--会话列表-->
-    <div v-for="item in sessionList" class="listSessionCard" @click="toChat">
+    <div v-for="item in sessionList" class="listSessionCard" @click="toChat(item)">
       <div class="listSessionAvatar">
         <a-avatar shape="square" :size="40"
                   :src="item.avatar"/>
@@ -12,10 +12,10 @@
             <div>{{ item.userName }}</div>
           </div>
           <div style="width:40%;"></div>
-          <div class="listSessionInfo-time">{{ item.msgSeq }}</div>
+          <div class="listSessionInfo-time">{{ time(item.msgSeq) }}</div>
         </div>
         <div class="listSessionInfo-text">
-          <div>{{ item.content }}</div>
+          <div>{{ item.nowMsg }}</div>
         </div>
       </div>
     </div>
@@ -25,18 +25,37 @@
 <script>
 import {eventBus} from "@/main";
 import Session from "@/js/list_session/Session";
+import SocketUtil from "@/js/SocketUtil";
 
 export default {
   name: "ListSession",
   data() {
     return {
       sessionList: [],
-      sessionDB: new Session(this.$store.getters.getDB)
+      session: new Session(this.$store.getters.getDB),
+      emitter: SocketUtil.getEmitter()
     }
   },
   created() {
-    eventBus.$on('newFriend', data => {
-      console.log('newFriend: ', data)
+    this.init()
+    this.emitter.on('addSingleRecord', (message) => {
+      let exist = this.sessionList.some(session => {
+        if (session.lid === message.receiver || session.lid === message.sender) {
+          session.msgSeq = message.msgSeq
+          if (message.contentType === 1) {
+            session.nowMsg = message.content
+          } else {
+            session.nowMsg = '[图片]'
+          }
+          return true
+        }
+      })
+      if (!exist) {
+        this.sessionList.unshift(message)
+      }
+      this.sessionList.sort((session_1, session_2) => {
+        return session_2.msgSeq - session_1.msgSeq
+      })
     })
     eventBus.$on('toListSession', (value) => {
       let exist = this.sessionList.some(session => {
@@ -47,16 +66,24 @@ export default {
       if (!exist) {
         this.sessionList.unshift(value)
       }
-      eventBus.$emit('toSingleChatMain',value)
+      eventBus.$emit('toSingleChatMain', value)
     })
   },
   methods: {
-    toChat() {
-      // eventBus.$on('toChat', (value) => {
-      //   console.log('ListSession: ', value)
-      //   this.sessionList.unshift(value)
-      // })
-
+    init() {
+      this.session.getSessions(this.$store.state.user.lid, (data) => {
+        console.log('getSession: ', data)
+        this.sessionList = data
+        this.sessionList.sort((session_1, session_2) => {
+          return session_2.msgSeq - session_1.msgSeq
+        })
+      })
+    },
+    toChat(item) {
+      eventBus.$emit('toSingleChatMain', item)
+    },
+    time(val) {
+      return this.session.time(val)
     }
   },
   beforeDestroy() {

@@ -20,12 +20,13 @@
 <script>
 import user from "@/js/User";
 import {eventBus} from "@/main";
+import Friend from "@/js/liset_friend/Friend";
 export default {
   name: "ListFriends",
   data() {
     return {
       user: this.$store.getters.getUser,
-      chatDB: this.$store.getters.getDB,
+      friend: new Friend(),
       friends: []
     }
   },
@@ -36,8 +37,9 @@ export default {
     getFriends(){
       user.friends(this.user.lid).then(response => {
         let result = response.data.data
-        console.log(result)
+        console.log('getFriends: ',result)
         this.friends = result
+        this.friend.updateFriend(result)
       })
     },
     watchFriend(value){

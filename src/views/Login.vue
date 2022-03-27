@@ -15,13 +15,15 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron'
+import {ipcRenderer} from 'electron'
 
 import user from '@/js/User'
 import MessageCodec from "@/js/MessageCodec";
 import SystemMessage from "@/js/tcpMessage/SystemMessage";
 import Message from "@/js/tcpMessage/Message";
 import SocketUtil from "@/js/SocketUtil";
+import ChatDB from "@/js/ChatDB";
+
 export default {
   name: "Login",
   data() {
@@ -39,9 +41,11 @@ export default {
         if (value.code === 200) {
           let user = value.data
           this.$store.commit('setUser', user)
-          let message = new SystemMessage(6,user.lid,'server')
-          SocketUtil.send(MessageCodec.encode(message))
-          ipcRenderer.send('login','data')
+          let chatDB = new ChatDB(user.userName+'.db')
+          this.$store.commit('setDB',chatDB)
+          let message = new SystemMessage(new Date().getTime(), 6, user.lid, 'server')
+          SocketUtil.send(message)
+          ipcRenderer.send('login', 'data')
           ipcRenderer.on('success', ((event, arg) => {
             this.$router.push('/index')
           }))
