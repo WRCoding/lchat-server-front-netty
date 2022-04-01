@@ -11,7 +11,7 @@
           <div class="listSessionInfo-name">
             <div>{{ item.userName }}</div>
           </div>
-          <div style="width:40%;"></div>
+          <div style="width:30%;"></div>
           <div class="listSessionInfo-time">{{ time(item.msgSeq) }}</div>
         </div>
         <div class="listSessionInfo-text">
@@ -71,7 +71,8 @@ export default {
   },
   methods: {
     init() {
-      this.session.getSessions(this.$store.state.user.lid, (data) => {
+      let lid = this.$store.state.user.lid
+      this.session.getOffLineMsg(lid, (data) => {
         console.log('getSession: ', data)
         this.sessionList = data
         this.sessionList.sort((session_1, session_2) => {
@@ -150,8 +151,8 @@ export default {
 }
 
 .listSessionInfo-time {
-  width: 20%;
-  font-size: 13px;
+  width: 30%;
+  font-size: 11px;
   font-weight: lighter;
   color: rgb(172, 172, 172)
 }

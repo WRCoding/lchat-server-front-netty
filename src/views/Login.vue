@@ -28,7 +28,7 @@ export default {
   name: "Login",
   data() {
     return {
-      userName: 'xw',
+      userName: 'ww',
       passWord: '123456'
     }
   },

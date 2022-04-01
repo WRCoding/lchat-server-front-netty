@@ -30,4 +30,20 @@ export default {
             method: 'get'
         })
     },
+    uploadFile(data){
+        return request({
+            url: '/user/uploadFile',
+            method: 'post',
+            headers: { 'Content-Type': 'application/json' },
+            data: data
+        })
+    },
+    update(data){
+        return request({
+            url: '/user/update',
+            method: 'post',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            data: data
+        })
+    }
 }
